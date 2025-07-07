@@ -1,11 +1,8 @@
 package com.study.Spring.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
 public class Product {
     private Long id;
