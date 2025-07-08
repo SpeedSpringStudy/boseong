@@ -18,7 +18,6 @@ public class ProductRepository {
     public void save(Product product) {
         product.setId(++sequence);
         store.put(product.getId(), product);
-        return;
     }
 
     public Optional<Product> findById(Long id) {
@@ -31,7 +30,6 @@ public class ProductRepository {
             product.setName(updated.getName());
             product.setPrice(updated.getPrice());
         }
-        return;
     }
 
     public void delete(Long id) {
