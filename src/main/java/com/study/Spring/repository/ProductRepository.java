@@ -15,21 +15,23 @@ public class ProductRepository {
         return new ArrayList<>(store.values());
     }
 
-    public void save(Product product) {
+    public Long save(Product product) {
         product.setId(++sequence);
         store.put(product.getId(), product);
+        return product.getId();
     }
 
     public Optional<Product> findById(Long id) {
         return Optional.ofNullable(store.get(id));
     }
 
-    public void update(Long id, Product updated) {
+    public Long update(Long id, Product updated) {
         Product product = store.get(id);
         if (product != null) {
             product.setName(updated.getName());
             product.setPrice(updated.getPrice());
         }
+        return product.getId();
     }
 
     public void delete(Long id) {
