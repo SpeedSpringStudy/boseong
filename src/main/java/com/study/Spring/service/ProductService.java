@@ -17,11 +17,11 @@ public class ProductService {
         return productRepository.findAll();
     }
 
-    public Product create(Product product) {
+    public Long create(Product product) {
         return productRepository.save(product);
     }
 
-    public Product update(Long id, Product product) {
+    public Long update(Long id, Product product) {
         return productRepository.update(id, product);
     }
 

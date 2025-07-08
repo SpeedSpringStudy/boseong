@@ -20,12 +20,12 @@ public class ProductController {
     }
 
     @PostMapping
-    public Product create(@RequestBody Product product) {
+    public Long create(@RequestBody Product product) {
         return productService.create(product);
     }
 
     @PutMapping("/{id}")
-    public Product update(@PathVariable Long id, @RequestBody Product product) {
+    public Long update(@PathVariable Long id, @RequestBody Product product) {
         return productService.update(id, product);
     }
 
