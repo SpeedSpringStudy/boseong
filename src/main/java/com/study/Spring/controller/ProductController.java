@@ -1,6 +1,7 @@
 package com.study.Spring.controller;
 
-import com.study.Spring.entity.Product;
+import com.study.Spring.dto.ProductRequestDto;
+import com.study.Spring.dto.ProductResponseDto;
 import com.study.Spring.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -15,22 +16,22 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping
-    public List<Product> getAll() {
+    public List<ProductResponseDto> getAll() {
         return productService.getAll();
     }
 
     @PostMapping
-    public Long create(@RequestBody Product product) {
-        return productService.create(product);
+    public Long create(@RequestBody ProductRequestDto requestDto) {
+        return productService.create(requestDto);
     }
 
     @PutMapping("/{id}")
-    public Long update(@PathVariable Long id, @RequestBody Product product) {
-        return productService.update(id, product);
+    public Long update(@PathVariable Long id, @RequestBody ProductRequestDto requestDto) {
+        return productService.update(id, requestDto);
     }
 
     @DeleteMapping("/{id}")
-    public Long delete(@PathVariable Long id) {
-        return productService.delete(id);
+    public void delete(@PathVariable Long id) {
+        productService.delete(id);
     }
 }
