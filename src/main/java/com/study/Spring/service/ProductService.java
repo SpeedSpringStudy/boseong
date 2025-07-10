@@ -24,12 +24,12 @@ public class ProductService {
     }
 
     public Long create(ProductRequestDto requestDto) {
-        Product product = new Product(null, requestDto.getName(), requestDto.getPrice());
+        Product product = new Product(null, requestDto.name(), requestDto.price());
         return productRepository.save(product);
     }
 
     public Long update(Long id, ProductRequestDto requestDto) {
-        Product updated = new Product(null, requestDto.getName(), requestDto.getPrice());
+        Product updated = new Product(null, requestDto.name(), requestDto.price());
         return productRepository.update(id, updated);
     }
 
