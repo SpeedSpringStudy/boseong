@@ -1,12 +1,4 @@
 package com.study.Spring.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
-@Getter
-@AllArgsConstructor
-public class ProductResponseDto {
-    private Long id;
-    private String name;
-    private int price;
+public record ProductResponseDto(Long id, String name, int price) {
 }
