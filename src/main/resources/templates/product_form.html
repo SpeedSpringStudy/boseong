@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>상품 추가</title>
+</head>
+<body>
+<h1>상품 추가</h1>
+
+<form id="productForm">
+    <label>상품명: <input type="text" id="name" /></label><br />
+    <label>가격: <input type="number" id="price" /></label><br />
+    <button type="submit">저장</button>
+</form>
+
+<script>
+    document.getElementById("productForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+        const name = document.getElementById("name").value;
+        const price = parseInt(document.getElementById("price").value);
+
+        fetch("/api/products", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name, price })
+        }).then(() => {
+            window.location.href = "/products";
+        });
+    });
+</script>
+
+</body>
+</html>

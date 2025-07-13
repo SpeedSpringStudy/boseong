@@ -3,21 +3,22 @@ package com.study.Spring.service;
 import com.study.Spring.dto.ProductRequestDto;
 import com.study.Spring.dto.ProductResponseDto;
 import com.study.Spring.entity.Product;
-import com.study.Spring.repository.ProductRepository;
+import com.study.Spring.dao.ProductDao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class ProductService {
 
-    private final ProductRepository productRepository;
+    private final ProductDao productDao;
 
     public List<ProductResponseDto> getAll() {
-        return productRepository.findAll()
+        return productDao.findAll()
                 .stream()
                 .map(product -> new ProductResponseDto(product.getId(), product.getName(), product.getPrice()))
                 .collect(Collectors.toList());
@@ -28,7 +29,7 @@ public class ProductService {
                 .name(requestDto.name())
                 .price(requestDto.price())
                 .build();
-        return productRepository.save(product);
+        return productDao.save(product);
     }
 
 
@@ -38,10 +39,16 @@ public class ProductService {
                 .name(requestDto.name())
                 .price(requestDto.price())
                 .build();
-        return productRepository.update(id, updated);
+        return productDao.update(id, updated);
     }
 
     public void delete(Long id) {
-        productRepository.delete(id);
+        productDao.delete(id);
+    }
+
+    public ProductResponseDto findById(Long id) {
+        Product product = productDao.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상품입니다."));
+        return new ProductResponseDto(product.getId(), product.getName(), product.getPrice());
     }
 }

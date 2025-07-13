@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <title>상품 목록</title>
+</head>
+<body>
+<h1>상품 목록</h1>
+<a href="/products/new">상품 추가</a>
+
+<table border="1">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>이름</th>
+        <th>가격</th>
+        <th>수정</th>
+        <th>삭제</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="product : ${products}">
+        <td th:text="${product.id}"></td>
+        <td th:text="${product.name}"></td>
+        <td th:text="${product.price}"></td>
+        <td>
+            <a th:href="'/products/edit/' + ${product.id}">수정</a>
+        </td>
+        <td>
+            <button th:attr="onclick=|deleteProduct(${product.id})|">삭제</button>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<script>
+    function deleteProduct(id) {
+        if (confirm("정말 삭제하시겠습니까?")) {
+            fetch(`/api/products/${id}`, {
+                method: 'DELETE'
+            }).then(() => location.reload());
+        }
+    }
+</script>
+</body>
+</html>
