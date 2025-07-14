@@ -1,6 +1,7 @@
 package com.study.Spring.dao;
 
 import com.study.Spring.entity.Product;
+import com.study.Spring.vo.Name;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -17,7 +18,7 @@ public class ProductDao {
 
     private final RowMapper<Product> productRowMapper = (rs, rowNum) -> Product.builder()
             .id(rs.getLong("id"))
-            .name(rs.getString("name"))
+            .name(new Name(rs.getString("name")))
             .price(rs.getInt("price"))
             .build();
 

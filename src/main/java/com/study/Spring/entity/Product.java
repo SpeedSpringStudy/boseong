@@ -1,5 +1,6 @@
 package com.study.Spring.entity;
 
+import com.study.Spring.vo.Name;
 import lombok.*;
 
 @Data
@@ -7,6 +8,6 @@ import lombok.*;
 @Builder
 public class Product {
     private Long id;
-    private String name;
+    private Name name;
     private int price;
 }
