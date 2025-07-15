@@ -22,12 +22,12 @@ public class ProductController {
     }
 
     @PostMapping
-    public Long create(@Valid @RequestBody ProductRequestDto requestDto) {
+    public Long create(@RequestBody ProductRequestDto requestDto) {
         return productService.create(requestDto);
     }
 
     @PutMapping("/{id}")
-    public Long update(@PathVariable Long id, @Valid @RequestBody ProductRequestDto requestDto) {
+    public Long update(@PathVariable Long id, @RequestBody ProductRequestDto requestDto) {
         return productService.update(id, requestDto);
     }
 //    @PostMapping
