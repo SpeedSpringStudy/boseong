@@ -113,3 +113,13 @@
     -[ ] 가능한 특수 문자: ( ), [ ], +, -, &, /, _
     -[ ] "카카오"가 포함된 문구는 담당 MD와 협의한 경우에만 사용 가능
 </details>
+
+<details>
+<summary><strong>Week#2-Step#2</strong></summary>
+### 로그인 및 회원가입 
+- [ ] email, password 를 통한 회원가입
+- [ ] 유저 정보를 기반으로 한 로그인
+
+### 토큰 발급
+- [ ] 로그인이 완료된다면 토큰 제공 (bearer 방식 -> JWT 사용)
+</details>
