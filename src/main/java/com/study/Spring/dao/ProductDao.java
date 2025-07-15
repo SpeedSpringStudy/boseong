@@ -23,8 +23,11 @@ public class ProductDao {
             .build();
 
     public Long save(Product product) {
-        jdbcTemplate.update("INSERT INTO product (name, price) VALUES (?, ?)",
-                product.getName(), product.getPrice());
+        jdbcTemplate.update(
+                "INSERT INTO product (name, price) VALUES (?, ?)",
+                product.getName().toString(),
+                product.getPrice()
+        );
         return jdbcTemplate.queryForObject("SELECT MAX(id) FROM product", Long.class);
     }
 
@@ -39,8 +42,12 @@ public class ProductDao {
     }
 
     public Long update(Long id, Product product) {
-        jdbcTemplate.update("UPDATE product SET name = ?, price = ? WHERE id = ?",
-                product.getName(), product.getPrice(), id);
+        jdbcTemplate.update(
+                "UPDATE product SET name = ?, price = ? WHERE id = ?",
+                product.getName().toString(),
+                product.getPrice(),
+                id
+        );
         return id;
     }
 
