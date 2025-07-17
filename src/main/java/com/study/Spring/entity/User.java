@@ -2,8 +2,9 @@ package com.study.Spring.entity;
 
 import lombok.*;
 
-@Getter @Setter
-@NoArgsConstructor @AllArgsConstructor
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class User {
     private Long id;
