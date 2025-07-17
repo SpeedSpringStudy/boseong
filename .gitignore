@@ -1,0 +1,52 @@
+# === Gradle ===
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!gradle/wrapper/gradle-wrapper.properties
+
+# === IntelliJ IDEA ===
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
+
+# === VS Code ===
+.vscode/
+
+# === macOS ===
+.DS_Store
+
+# === Logs ===
+*.log
+
+# === OS Files ===
+ehthumbs.db
+Thumbs.db
+
+# === Java ===
+*.class
+
+# === Application Properties (optional: uncomment if you store secrets locally) ===
+# src/main/resources/application.properties
+# src/main/resources/application.yml
+
+# === Test Reports ===
+test-output/
+target/
+
+# === Backup or temp files ===
+*.swp
+*.bak
+*.tmp
+*~
+
+# === HTML template cache (if any) ===
+*.html~*
+
+# === Node (if used in frontend) ===
+node_modules/
+
+# === IDE auto save files ===
+*.sublime-workspace
+*.sublime-project
