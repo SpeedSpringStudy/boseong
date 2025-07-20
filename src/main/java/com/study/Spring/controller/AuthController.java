@@ -21,6 +21,12 @@ public class AuthController {
     private final JwtTokenProvider jwtTokenProvider;
     private final UserService userService;
 
+    @PostMapping("/signup")
+    public ResponseEntity<String> signup(@RequestBody @Valid SignupRequestDto request) {
+        userService.register(request.username(), request.password());
+        return ResponseEntity.ok("회원가입 성공");
+    }
+
     @PostMapping("/login")
     public Map<String, String> login(@RequestBody Map<String, String> loginInfo) {
         String username = loginInfo.get("username");
@@ -33,11 +39,5 @@ public class AuthController {
         String token = jwtTokenProvider.createToken(authentication.getName());
 
         return Map.of("token", token);
-    }
-
-    @PostMapping("/signup")
-    public ResponseEntity<String> signup(@RequestBody @Valid SignupRequestDto request) {
-        userService.register(request.username(), request.password());
-        return ResponseEntity.ok("회원가입 성공");
     }
 }
