@@ -3,15 +3,19 @@ package com.study.Spring.controller;
 import com.study.Spring.dto.SignupRequestDto;
 import com.study.Spring.security.JwtTokenProvider;
 import com.study.Spring.service.UserService;
+import com.study.Spring.entity.User;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
+
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,7 +32,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public Map<String, String> login(@RequestBody Map<String, String> loginInfo) {
+    public ResponseEntity<String> login(@RequestBody Map<String, String> loginInfo, HttpServletResponse response ) {
         String username = loginInfo.get("username");
         String password = loginInfo.get("password");
 
@@ -36,9 +40,38 @@ public class AuthController {
                 new UsernamePasswordAuthenticationToken(username, password)
         );
 
-        String accessToken = jwtTokenProvider.createToken(authentication.getName());
-        String refreshToken = jwtTokenProvider.createRefreshToken(authentication.getName());
+        String accessToken = jwtTokenProvider.createToken(username);
 
-        return Map.of("token", accessToken);
+        String refreshToken = jwtTokenProvider.createRefreshToken(username);
+        userService.updateRefreshToken(username, refreshToken);
+
+        Cookie accessTokenCookie = new Cookie("access_token", accessToken);
+        accessTokenCookie.setHttpOnly(true);
+        accessTokenCookie.setSecure(true);
+        accessTokenCookie.setPath("/");
+        accessTokenCookie.setMaxAge(60 * 60); // 1시간
+        response.addCookie(accessTokenCookie);
+
+        return ResponseEntity.ok("로그인 성공");
+    }
+
+    @PostMapping("/refresh-token")
+    public ResponseEntity<Map<String, String>> refresh(@RequestBody Map<String, String> body) {
+        String username = body.get("username");
+        String refreshToken = body.get("refreshToken");
+
+        User user = userService.findByUsername(username);
+
+        if (!jwtTokenProvider.validateToken(refreshToken)) {
+            throw new IllegalArgumentException("유효하지 않은 리프레시 토큰입니다.");
+        }
+
+        if (!refreshToken.equals(user.getRefreshToken())) {
+            throw new IllegalArgumentException("토큰이 일치하지 않습니다.");
+        }
+
+        String newAccessToken = jwtTokenProvider.createToken(username);
+
+        return ResponseEntity.ok(Map.of("accessToken", newAccessToken));
     }
 }
