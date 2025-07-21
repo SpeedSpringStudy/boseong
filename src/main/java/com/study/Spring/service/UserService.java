@@ -30,6 +30,6 @@ public class UserService {
     }
 
     public void updateRefreshToken(String username, String refreshToken) {
-        userDao.updateRefreshToken(username, refreshToken); // DAO 메서드 호출
+        userDao.updateRefreshToken(username, refreshToken);
     }
 }

@@ -62,6 +62,10 @@ public class AuthController {
 
         User user = userService.findByUsername(username);
 
+        System.out.println("DB token: " + user.getRefreshToken());
+        System.out.println("Req token: " + refreshToken);
+        System.out.println("equal? " + refreshToken.equals(user.getRefreshToken()));
+
         if (!jwtTokenProvider.validateToken(refreshToken)) {
             throw new IllegalArgumentException("유효하지 않은 리프레시 토큰입니다.");
         }

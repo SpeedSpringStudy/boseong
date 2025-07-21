@@ -17,6 +17,7 @@ public class UserDao {
             .id(rs.getLong("id"))
             .username(rs.getString("username"))
             .password(rs.getString("password"))
+            .refreshToken(rs.getString("refresh_token"))
             .build();
 
     public void save(User user) {
