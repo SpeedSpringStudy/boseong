@@ -11,12 +11,24 @@ import java.security.Key;
 public class JwtTokenProvider {
 
     private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-    private final long EXPIRATION = 1000 * 60 * 60; // 1시간
+    private final long EXPIRATION = 1000 * 60 * 60;
+
+    private final Key refreshKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
     public String createToken(String username) {
         return Jwts.builder()
                 .setSubject(username)
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION))
+                .signWith(key)
+                .compact();
+    }
+
+    public String createRefreshToken(String username) {
+        long refreshTokenValidity = 1000L * 60 * 60 * 24;
+
+        return Jwts.builder()
+                .setSubject(username)
+                .setExpiration(new Date(System.currentTimeMillis() + refreshTokenValidity))
                 .signWith(key)
                 .compact();
     }

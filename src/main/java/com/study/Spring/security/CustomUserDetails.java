@@ -18,7 +18,7 @@ public class CustomUserDetails implements UserDetails {
     @Override public boolean isCredentialsNonExpired() { return true; }
     @Override public boolean isEnabled() { return true; }
     @Override public java.util.Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.emptyList(); // 권한 설정 없음
+        return Collections.emptyList();
     }
 
     public User getUser() { return user; }

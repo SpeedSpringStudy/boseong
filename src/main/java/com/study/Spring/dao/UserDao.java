@@ -17,12 +17,13 @@ public class UserDao {
             .id(rs.getLong("id"))
             .username(rs.getString("username"))
             .password(rs.getString("password"))
+            .refreshToken(rs.getString("refresh_token"))
             .build();
 
     public void save(User user) {
         jdbcTemplate.update(
-                "INSERT INTO users (username, password) VALUES (?, ?)",
-                user.getUsername(), user.getPassword()
+                "INSERT INTO users (username, password, refresh_token) VALUES (?, ?, ?)",
+                user.getUsername(), user.getPassword(), user.getRefreshToken()
         );
     }
 
@@ -41,5 +42,12 @@ public class UserDao {
                 Integer.class,
                 username
         ) > 0;
+    }
+
+    public void updateRefreshToken(String username, String refreshToken) {
+        jdbcTemplate.update(
+                "UPDATE users SET refresh_token = ? WHERE username = ?",
+                refreshToken, username
+        );
     }
 }
