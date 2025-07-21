@@ -20,6 +20,8 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf
                         .ignoringRequestMatchers("/h2-console/**")
                         .disable())
+                .headers(headers -> headers
+                        .frameOptions(frame -> frame.disable()))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/h2-console/**").permitAll()
                         .requestMatchers("/login", "/signup").permitAll()
