@@ -36,8 +36,9 @@ public class AuthController {
                 new UsernamePasswordAuthenticationToken(username, password)
         );
 
-        String token = jwtTokenProvider.createToken(authentication.getName());
+        String accessToken = jwtTokenProvider.createToken(authentication.getName());
+        String refreshToken = jwtTokenProvider.createRefreshToken(authentication.getName());
 
-        return Map.of("token", token);
+        return Map.of("token", accessToken);
     }
 }
