@@ -32,4 +32,9 @@ public class UserService {
     public void updateRefreshToken(String username, String refreshToken) {
         userDao.updateRefreshToken(username, refreshToken);
     }
+
+    public User findById(Long id) {
+        return userDao.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+    }
 }
