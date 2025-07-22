@@ -17,4 +17,9 @@ public class CustomUserDetailsService implements UserDetailsService {
         User user = userService.findByUsername(username);
         return new CustomUserDetails(user);
     }
+
+    public UserDetails loadUserById(Long id) {
+        User user = userService.findById(id);
+        return new CustomUserDetails(user);
+    }
 }

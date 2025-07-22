@@ -50,4 +50,10 @@ public class UserDao {
                 refreshToken, username
         );
     }
+
+    public Optional<User> findById(Long id) {
+        List<User> results = jdbcTemplate.query(
+                "SELECT * FROM users WHERE id = ?", userRowMapper, id);
+        return results.stream().findFirst();
+    }
 }
