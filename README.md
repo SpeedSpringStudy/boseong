@@ -126,7 +126,6 @@
 
 <details>
 <summary><strong>Week#2-Step#3</strong></summary>
-[ ] 위시리스트 추가
-    - 유저 아이디로 식별 가능해야 함
-
+###위시리스트 추가
+- [ ] 유저 아이디로 식별 가능해야 함
 </details>
