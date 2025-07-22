@@ -24,7 +24,7 @@ public class SecurityConfig {
                         .frameOptions(frame -> frame.disable()))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/h2-console/**").permitAll()
-                        .requestMatchers("/login", "/signup", "refresh-token").permitAll()
+                        .requestMatchers("/login", "/signup", "/refresh-token").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

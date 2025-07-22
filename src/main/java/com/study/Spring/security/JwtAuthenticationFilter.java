@@ -26,22 +26,36 @@ public class JwtAuthenticationFilter extends GenericFilter {
             throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
         String token = resolveToken(req);
+
         if (token != null && jwtTokenProvider.validateToken(token)) {
-            String username = jwtTokenProvider.getUsername(token);
-            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+            Long userId = jwtTokenProvider.getUserIdFromToken(token);
+            UserDetails userDetails = userDetailsService.loadUserById(userId); // ✅ 여기 수정
+
             UsernamePasswordAuthenticationToken authentication =
                     new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
             authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(req));
+
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
+
         chain.doFilter(request, response);
     }
 
     private String resolveToken(HttpServletRequest req) {
+
         String bearer = req.getHeader("Authorization");
         if (bearer != null && bearer.startsWith("Bearer ")) {
             return bearer.substring(7);
         }
+
+        if (req.getCookies() != null) {
+            for (Cookie cookie : req.getCookies()) {
+                if ("access_token".equals(cookie.getName())) {
+                    return cookie.getValue();
+                }
+            }
+        }
+
         return null;
     }
 }

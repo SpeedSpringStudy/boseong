@@ -40,9 +40,12 @@ public class AuthController {
                 new UsernamePasswordAuthenticationToken(username, password)
         );
 
-        String accessToken = jwtTokenProvider.createToken(username);
+        User user = userService.findByUsername(username);
+        Long userId = user.getId();
 
-        String refreshToken = jwtTokenProvider.createRefreshToken(username);
+        String accessToken = jwtTokenProvider.createToken(userId);
+
+        String refreshToken = jwtTokenProvider.createRefreshToken();
         userService.updateRefreshToken(username, refreshToken);
 
         Cookie accessTokenCookie = new Cookie("access_token", accessToken);
@@ -52,19 +55,34 @@ public class AuthController {
         accessTokenCookie.setMaxAge(60 * 60); // 1시간
         response.addCookie(accessTokenCookie);
 
+        response.addHeader("Set-Cookie",
+                "access_token=" + accessToken +
+                        "; Max-Age=3600" +
+                        "; Path=/" +
+                        "; Secure" +
+                        "; HttpOnly" +
+                        "; SameSite=Strict");
+
         return ResponseEntity.ok("로그인 성공");
     }
 
     @PostMapping("/refresh-token")
-    public ResponseEntity<Map<String, String>> refresh(@RequestBody Map<String, String> body) {
-        String username = body.get("username");
+    public ResponseEntity<Map<String, String>> refresh(HttpServletRequest request,
+                                                       @RequestBody Map<String, String> body) {
         String refreshToken = body.get("refreshToken");
 
-        User user = userService.findByUsername(username);
+        String accessToken = null;
+        for (Cookie cookie : request.getCookies()) {
+            if (cookie.getName().equals("access_token")) {
+                accessToken = cookie.getValue();
+            }
+        }
+        if (accessToken == null) {
+            throw new IllegalArgumentException("Access Token이 없습니다.");
+        }
 
-//        System.out.println("DB token: " + user.getRefreshToken());
-//        System.out.println("Req token: " + refreshToken);
-//        System.out.println("equal? " + refreshToken.equals(user.getRefreshToken()));
+        Long userId = jwtTokenProvider.getUserIdFromToken(accessToken);
+        User user = userService.findById(userId);
 
         if (!jwtTokenProvider.validateToken(refreshToken)) {
             throw new IllegalArgumentException("유효하지 않은 리프레시 토큰입니다.");
@@ -74,7 +92,11 @@ public class AuthController {
             throw new IllegalArgumentException("토큰이 일치하지 않습니다.");
         }
 
-        String newAccessToken = jwtTokenProvider.createToken(username);
+        String newAccessToken = jwtTokenProvider.createToken(userId);
+
+//      디버그용
+//        System.out.println("accessToken: " + accessToken);
+//        System.out.println("userId from token: " + userId);
 
         return ResponseEntity.ok(Map.of("accessToken", newAccessToken));
     }
