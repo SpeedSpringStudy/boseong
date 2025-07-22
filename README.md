@@ -115,8 +115,6 @@
 
 </details>
 
----
-
 <details>
 <summary><strong>Week#2-Step#2</strong></summary>
 
@@ -129,8 +127,6 @@
 - [ ] 로그인이 완료된다면 토큰 제공 (bearer 방식 -> JWT 사용)
 
 </details>
-
----
 
 <details>
 <summary><strong>Week#2-Step#3</strong></summary>
