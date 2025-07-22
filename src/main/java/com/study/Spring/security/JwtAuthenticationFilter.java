@@ -42,10 +42,20 @@ public class JwtAuthenticationFilter extends GenericFilter {
     }
 
     private String resolveToken(HttpServletRequest req) {
+
         String bearer = req.getHeader("Authorization");
         if (bearer != null && bearer.startsWith("Bearer ")) {
             return bearer.substring(7);
         }
+
+        if (req.getCookies() != null) {
+            for (Cookie cookie : req.getCookies()) {
+                if ("access_token".equals(cookie.getName())) {
+                    return cookie.getValue();
+                }
+            }
+        }
+
         return null;
     }
 }

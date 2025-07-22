@@ -94,6 +94,10 @@ public class AuthController {
 
         String newAccessToken = jwtTokenProvider.createToken(userId);
 
+//      디버그용
+//        System.out.println("accessToken: " + accessToken);
+//        System.out.println("userId from token: " + userId);
+
         return ResponseEntity.ok(Map.of("accessToken", newAccessToken));
     }
 }
