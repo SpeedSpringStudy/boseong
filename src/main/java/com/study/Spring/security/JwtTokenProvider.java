@@ -11,8 +11,8 @@ import java.util.Date;
 public class JwtTokenProvider {
 
     private final SecretKey key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-    private final long ACCESS_TOKEN_VALIDITY = 60 * 60 * 1000L; // 1시간
-    private final long REFRESH_TOKEN_VALIDITY = 7 * 24 * 60 * 60 * 1000L; // 7일
+    private final long ACCESS_TOKEN_VALIDITY = 60 * 60 * 1000L;
+    private final long REFRESH_TOKEN_VALIDITY = 7 * 24 * 60 * 60 * 1000L;
 
     public String createToken(Long userId) {
         return Jwts.builder()

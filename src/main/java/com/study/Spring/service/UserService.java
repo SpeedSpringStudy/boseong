@@ -18,7 +18,7 @@ public class UserService {
 
         User user = User.builder()
                 .username(username)
-                .password("{noop}" + password) // 나중에 BCrypt로 변경
+                .password("{noop}" + password)
                 .build();
 
         userDao.save(user);
