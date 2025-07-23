@@ -136,3 +136,20 @@
 - [ ] 유저 아이디로 식별 가능해야 함
 
 </details>
+
+# Week3
+<details>
+<summary><strong>Week#3-Step#1</strong></summary>
+
+### 기존 코드 리팩토링
+- [ ] 엔티티, 레포지토리 작성
+- [ ] 그에 맞게 서비스 수정
+- [ ] Dao 삭제
+
+### 테스트 코드 작성
+- [ ] 기존 Service 테스트 수정
+- [ ] `@DataJpaTest` 이용하여 테스트 작성
+- [ ] 새로운 E2E 테스트 작성
+    
+
+</details>
