@@ -52,7 +52,7 @@ public class AuthController {
         accessTokenCookie.setHttpOnly(true);
         accessTokenCookie.setSecure(true);
         accessTokenCookie.setPath("/");
-        accessTokenCookie.setMaxAge(60 * 60); // 1시간
+        accessTokenCookie.setMaxAge(60 * 60);
         response.addCookie(accessTokenCookie);
 
         response.addHeader("Set-Cookie",

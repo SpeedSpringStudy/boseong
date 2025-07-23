@@ -20,19 +20,19 @@ public class ProductViewController {
     public String showProductList(Model model) {
         List<ProductResponseDto> products = productService.getAll();
         model.addAttribute("products", products);
-        return "products"; // templates/products.html
+        return "products";
     }
 
     @GetMapping("/products/new")
     public String showCreateForm(Model model) {
         model.addAttribute("product", new ProductResponseDto(null, "", 0));
-        return "product_form"; // templates/product_form.html
+        return "product_form";
     }
 
     @GetMapping("/products/edit/{id}")
     public String showEditForm(@PathVariable Long id, Model model) {
         ProductResponseDto product = productService.findById(id);
         model.addAttribute("product", product);
-        return "product_edit_form"; // templates/product_edit_form.html
+        return "product_edit_form";
     }
 }

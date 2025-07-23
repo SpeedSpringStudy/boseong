@@ -29,7 +29,7 @@ public class JwtAuthenticationFilter extends GenericFilter {
 
         if (token != null && jwtTokenProvider.validateToken(token)) {
             Long userId = jwtTokenProvider.getUserIdFromToken(token);
-            UserDetails userDetails = userDetailsService.loadUserById(userId); // ✅ 여기 수정
+            UserDetails userDetails = userDetailsService.loadUserById(userId);
 
             UsernamePasswordAuthenticationToken authentication =
                     new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
