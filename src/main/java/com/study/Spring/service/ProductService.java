@@ -3,7 +3,8 @@ package com.study.Spring.service;
 import com.study.Spring.dto.ProductRequestDto;
 import com.study.Spring.dto.ProductResponseDto;
 import com.study.Spring.entity.Product;
-import com.study.Spring.dao.ProductDao;
+//import com.study.Spring.dao.ProductDao;
+import com.study.Spring.repository.ProductRepository;
 import com.study.Spring.vo.Name;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,10 +16,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ProductService {
 
-    private final ProductDao productDao;
+//    private final ProductDao productDao;
+    private final ProductRepository productRepository;
 
     public List<ProductResponseDto> getAll() {
-        return productDao.findAll()
+        return productRepository.findAll()
                 .stream()
                 .map(product -> new ProductResponseDto(product.getId(), product.getName().toString(), product.getPrice()))
                 .collect(Collectors.toList());
@@ -30,7 +32,7 @@ public class ProductService {
                 .name(new Name(requestDto.name()))
                 .price(requestDto.price())
                 .build();
-        return productDao.save(product);
+        return productRepository.save(product).getId();
     }
 
 
@@ -40,15 +42,15 @@ public class ProductService {
                 .name(new Name(requestDto.name()))
                 .price(requestDto.price())
                 .build();
-        return productDao.update(id, updated);
+        return productRepository.save(updated).getId();
     }
 
     public void delete(Long id) {
-        productDao.delete(id);
+        productRepository.deleteById(id);
     }
 
     public ProductResponseDto findById(Long id) {
-        Product product = productDao.findById(id)
+        Product product = productRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상품입니다."));
         return new ProductResponseDto(product.getId(), product.getName().toString(), product.getPrice());
     }

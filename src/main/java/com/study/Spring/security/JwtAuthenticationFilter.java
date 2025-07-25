@@ -41,6 +41,8 @@ public class JwtAuthenticationFilter extends GenericFilter {
         chain.doFilter(request, response);
     }
 
+
+
     private String resolveToken(HttpServletRequest req) {
 
         String bearer = req.getHeader("Authorization");

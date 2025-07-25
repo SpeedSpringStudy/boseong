@@ -1,6 +1,7 @@
 package com.study.Spring.controller;
 
-import com.study.Spring.entity.Wishlist;
+import com.study.Spring.dto.WishlistRequestDto;
+import com.study.Spring.dto.WishlistResponseDto;
 import com.study.Spring.security.JwtTokenProvider;
 import com.study.Spring.service.WishlistService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,15 +18,15 @@ public class WishlistController {
     private final WishlistService wishlistService;
     private final JwtTokenProvider jwtTokenProvider;
 
-    @PostMapping("/{productId}")
-    public void add(@PathVariable Long productId, HttpServletRequest request) {
+    @PostMapping
+    public WishlistResponseDto add(@RequestBody WishlistRequestDto requestDto, HttpServletRequest request) {
         String token = extractToken(request);
         Long userId = jwtTokenProvider.getUserIdFromToken(token);
-        wishlistService.addToWishlist(userId, productId);
+        return wishlistService.addToWishlist(userId, requestDto.productId());
     }
 
     @GetMapping
-    public List<Wishlist> get(HttpServletRequest request) {
+    public List<WishlistResponseDto> get(HttpServletRequest request) {
         String token = extractToken(request);
         Long userId = jwtTokenProvider.getUserIdFromToken(token);
         return wishlistService.getWishlist(userId);

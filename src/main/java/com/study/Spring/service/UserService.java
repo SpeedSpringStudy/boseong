@@ -1,18 +1,22 @@
 package com.study.Spring.service;
 
-import com.study.Spring.dao.UserDao;
+//import com.study.Spring.dao.UserDao;
 import com.study.Spring.entity.User;
+import com.study.Spring.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
-    private final UserDao userDao;
+//    private final UserDao userDao;
+    private final UserRepository userRepository;
 
+    @Transactional
     public void register(String username, String password) {
-        if (userDao.existsByUsername(username)) {
+        if (userRepository.existsByUsername(username)) {
             throw new IllegalArgumentException("이미 존재하는 사용자입니다.");
         }
 
@@ -21,20 +25,24 @@ public class UserService {
                 .password("{noop}" + password)
                 .build();
 
-        userDao.save(user);
+        userRepository.save(user);
     }
 
+    @Transactional(readOnly = true)
     public User findByUsername(String username) {
-        return userDao.findByUsername(username)
+        return userRepository.findByUsername(username)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
     }
 
     public void updateRefreshToken(String username, String refreshToken) {
-        userDao.updateRefreshToken(username, refreshToken);
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+        user.setRefreshToken(refreshToken);
+        userRepository.save(user);
     }
 
+    @Transactional
     public User findById(Long id) {
-        return userDao.findById(id)
+        return userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
     }
 }
