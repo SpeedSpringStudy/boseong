@@ -1,6 +1,11 @@
 package com.study.Spring.vo;
 
-public record Name(String value) {
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
+
+
+@Embeddable
+public record Name(@Column(name = "name_value") String value) {
     public Name {
         if (value == null || value.isBlank()) {
             throw new IllegalArgumentException("상품명은 필수입니다.");
