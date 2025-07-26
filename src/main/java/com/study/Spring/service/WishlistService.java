@@ -10,6 +10,8 @@ import com.study.Spring.repository.UserRepository;
 import com.study.Spring.repository.WishlistRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -45,15 +47,14 @@ public class WishlistService {
 //        return responseDto;
 //    }
 
-    public List<WishlistResponseDto> getWishlist(Long userId) {
-        return wishlistRepository.findByUserId(userId).stream()
+    public Page<WishlistResponseDto> getWishlist(Long userId, Pageable pageable) {
+        return wishlistRepository.findByUserId(userId, pageable)
                 .map(w -> new WishlistResponseDto(
                         w.getId(),
                         w.getProduct().getId(),
                         w.getProduct().getName(),
                         w.getProduct().getPrice()
-                ))
-                .toList();
+                ));
     }
     public void removeFromWishlist(Long wishlistId) {
         wishlistRepository.deleteById(wishlistId);
