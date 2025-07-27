@@ -12,6 +12,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 @Service
 @RequiredArgsConstructor
 public class ProductService {
@@ -19,13 +22,21 @@ public class ProductService {
 //    private final ProductDao productDao;
     private final ProductRepository productRepository;
 
+    public Page<ProductResponseDto> getAll(Pageable pageable) {
+        return productRepository.findAll(pageable)
+                .map(product -> new ProductResponseDto(product.getId(), product.getName().toString(), product.getPrice()));
+    }
+
     public List<ProductResponseDto> getAll() {
         return productRepository.findAll()
                 .stream()
-                .map(product -> new ProductResponseDto(product.getId(), product.getName().toString(), product.getPrice()))
+                .map(product -> new ProductResponseDto(
+                        product.getId(),
+                        product.getName().toString(),
+                        product.getPrice()
+                ))
                 .collect(Collectors.toList());
     }
-
     public Long create(ProductRequestDto requestDto) {
 //        validateProductName(requestDto.name());
         Product product = Product.builder()
