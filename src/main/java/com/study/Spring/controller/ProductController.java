@@ -5,8 +5,8 @@ import com.study.Spring.dto.ProductResponseDto;
 import com.study.Spring.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Slice;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 @RestController
@@ -17,7 +17,7 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping
-    public Page<ProductResponseDto> getAll(Pageable pageable) {
+    public Slice<ProductResponseDto> getAll(Pageable pageable) {
         return productService.getAll(pageable);
     }
 
