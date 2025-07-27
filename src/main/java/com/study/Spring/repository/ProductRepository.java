@@ -50,5 +50,5 @@ import org.springframework.data.domain.Pageable;
 
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
-    Slice<Product> findByAll(Pageable pageable);
+    Slice<Product> findAllBy(Pageable pageable);
 }

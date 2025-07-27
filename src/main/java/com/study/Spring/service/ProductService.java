@@ -7,6 +7,7 @@ import com.study.Spring.entity.Product;
 import com.study.Spring.repository.ProductRepository;
 import com.study.Spring.vo.Name;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,8 +23,8 @@ public class ProductService {
 //    private final ProductDao productDao;
     private final ProductRepository productRepository;
 
-    public Page<ProductResponseDto> getAll(Pageable pageable) {
-        return productRepository.findAll(pageable)
+    public Slice<ProductResponseDto> getAll(Pageable pageable) {
+        return productRepository.findAllBy(pageable)
                 .map(product -> new ProductResponseDto(product.getId(), product.getName().toString(), product.getPrice()));
     }
 
