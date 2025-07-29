@@ -30,6 +30,21 @@ public class UserService {
         userRepository.save(user);
     }
 
+    @Transactional
+    public void registerAdmin(String username, String password) {
+        if (userRepository.existsByUsername(username)) {
+            throw new IllegalArgumentException("이미 존재하는 사용자입니다.");
+        }
+
+        User admin = User.builder()
+                .username(username)
+                .password("{noop}" + password)
+                .role(Role.ADMIN)
+                .build();
+
+        userRepository.save(admin);
+    }
+
     @Transactional(readOnly = true)
     public User findByUsername(String username) {
         return userRepository.findByUsername(username)

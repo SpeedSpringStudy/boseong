@@ -20,7 +20,7 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**").disable())
                 .headers(headers -> headers.frameOptions(frame -> frame.disable()))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/h2-console/**", "/login", "/signup", "/refresh-token").permitAll()
+                        .requestMatchers("/h2-console/**", "/login", "/signup/**", "/refresh-token").permitAll()
                         .requestMatchers("/api/categories/**").hasRole("ADMIN") // 관리자만
                         .anyRequest().authenticated()
                 )
