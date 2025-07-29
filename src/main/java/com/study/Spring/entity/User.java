@@ -22,4 +22,8 @@ public class User {
 
     @Column(name = "refresh_token")
     private String refreshToken;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role;
 }
