@@ -12,5 +12,8 @@ public record ProductRequestDto(
         String name,
 
         @Min(value = 0, message = "가격은 0 이상이어야 합니다.")
-        int price
+        int price,
+
+        @NotNull(message="카테고리는 필수입니다.")
+        Long categoryId
 ) {}

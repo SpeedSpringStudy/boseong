@@ -7,8 +7,8 @@ import com.study.Spring.service.WishlistService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,11 +25,12 @@ public class WishlistController {
         return wishlistService.addToWishlist(userId, requestDto.productId());
     }
 
+    // 페이지네이션 적용
     @GetMapping
-    public List<WishlistResponseDto> get(HttpServletRequest request) {
+    public Page<WishlistResponseDto> get(HttpServletRequest request, Pageable pageable) {
         String token = extractToken(request);
         Long userId = jwtTokenProvider.getUserIdFromToken(token);
-        return wishlistService.getWishlist(userId);
+        return wishlistService.getWishlist(userId, pageable);
     }
 
     @DeleteMapping("/{wishlistId}")

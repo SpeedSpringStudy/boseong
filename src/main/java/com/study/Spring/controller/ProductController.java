@@ -5,9 +5,9 @@ import com.study.Spring.dto.ProductResponseDto;
 import com.study.Spring.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Slice;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.data.domain.Pageable;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,17 +17,17 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping
-    public List<ProductResponseDto> getAll() {
-        return productService.getAll();
+    public Slice<ProductResponseDto> getAll(Pageable pageable) {
+        return productService.getAll(pageable);
     }
 
     @PostMapping
-    public Long create(@RequestBody ProductRequestDto requestDto) {
+    public Long create(@RequestBody @Valid ProductRequestDto requestDto) {
         return productService.create(requestDto);
     }
 
     @PutMapping("/{id}")
-    public Long update(@PathVariable Long id, @RequestBody ProductRequestDto requestDto) {
+    public Long update(@PathVariable Long id, @RequestBody @Valid ProductRequestDto requestDto) {
         return productService.update(id, requestDto);
     }
 //    @PostMapping
