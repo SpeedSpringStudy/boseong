@@ -17,6 +17,8 @@ import java.util.Map;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 
+import com.study.Spring.dto.AdminSignupRequestDto;
+
 @RestController
 @RequiredArgsConstructor
 public class AuthController {
@@ -25,10 +27,16 @@ public class AuthController {
     private final JwtTokenProvider jwtTokenProvider;
     private final UserService userService;
 
-    @PostMapping("/signup")
+    @PostMapping("/signup/user")
     public ResponseEntity<String> signup(@RequestBody @Valid SignupRequestDto request) {
         userService.register(request.username(), request.password());
         return ResponseEntity.ok("회원가입 성공");
+    }
+
+    @PostMapping("/signup/admin")
+    public ResponseEntity<String> signupAdmin(@RequestBody @Valid AdminSignupRequestDto request) {
+        userService.registerAdmin(request.username(), request.password());
+        return ResponseEntity.ok("관리자 계정 생성 성공");
     }
 
     @PostMapping("/login")
@@ -63,7 +71,7 @@ public class AuthController {
                         "; HttpOnly" +
                         "; SameSite=Strict");
 
-        return ResponseEntity.ok("로그인 성공");
+        return ResponseEntity.ok(accessToken);
     }
 
     @PostMapping("/refresh-token")
