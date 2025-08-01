@@ -240,3 +240,11 @@ Content-Type: application/json
   - [ ] 각 상품의 옵션별 잔여 수량 저장 api구현
 
 </details>
+
+<details>
+<summary><strong>Week#4-Step#3,4</strong></summary>
+
+## step 3,4 차감 기능 구현 - 동시성 제어 필요
+
+</details>
+
