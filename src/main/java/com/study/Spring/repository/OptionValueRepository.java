@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface OptionValueRepository extends JpaRepository<OptionValue, Long> {
-    List<OptionValue> findByOptionGroupId(Long optionGroupId);
+    List<OptionValue> findByOptionGroupTypeId(Long typeId);
 }

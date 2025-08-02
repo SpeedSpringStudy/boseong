@@ -1,7 +1,9 @@
 package com.study.Spring.controller;
 
-import com.study.Spring.entity.OptionGroup;
-import com.study.Spring.entity.OptionValue;
+import com.study.Spring.dto.CreateOptionGroupRequest;
+import com.study.Spring.dto.CreateOptionValueRequest;
+import com.study.Spring.dto.OptionGroupResponse;
+import com.study.Spring.dto.OptionValueResponse;
 import com.study.Spring.service.OptionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,24 +19,22 @@ public class OptionController {
     private final OptionService optionService;
 
     @PostMapping("/groups")
-    public ResponseEntity<Long> createOptionGroup(@RequestParam Long productId, @RequestParam String name) {
-        Long id = optionService.createOptionGroup(productId, name);
-        return ResponseEntity.ok(id);
+    public ResponseEntity<OptionGroupResponse> createGroup(@RequestBody CreateOptionGroupRequest request) {
+        return ResponseEntity.ok(optionService.createOptionGroup(request.getProductId(), request.getName()));
     }
 
     @PostMapping("/values")
-    public ResponseEntity<Long> createOptionValue(@RequestParam Long groupId, @RequestParam String value) {
-        Long id = optionService.createOptionValue(groupId, value);
-        return ResponseEntity.ok(id);
+    public ResponseEntity<OptionValueResponse> createOptionValue(@RequestBody CreateOptionValueRequest request) {
+        return ResponseEntity.ok(optionService.createOptionValue(request.getGroupId(), request.getValue()));
     }
 
     @GetMapping("/groups")
-    public ResponseEntity<List<OptionGroup>> getOptionGroups(@RequestParam Long productId) {
+    public ResponseEntity<List<OptionGroupResponse>> getOptionGroups(@RequestParam Long productId) {
         return ResponseEntity.ok(optionService.getOptionGroups(productId));
     }
 
     @GetMapping("/values")
-    public ResponseEntity<List<OptionValue>> getOptionValues(@RequestParam Long groupId) {
+    public ResponseEntity<List<OptionValueResponse>> getOptionValues(@RequestParam Long groupId) {
         return ResponseEntity.ok(optionService.getOptionValues(groupId));
     }
 }

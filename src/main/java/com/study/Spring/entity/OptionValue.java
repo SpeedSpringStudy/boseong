@@ -4,21 +4,23 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "option_values")
-@Data
-@AllArgsConstructor
+@Getter
+@Setter
+@Builder // 추가
 @NoArgsConstructor
-@Builder
+@AllArgsConstructor
+@Table(name = "option_values")
 public class OptionValue {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long valueId;
+    @Column(name = "value_id")
+    private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "type_id", nullable = false)
     private OptionGroup optionGroup;
 
-    @Column(nullable = false, length = 50)
-    private String value;
+    @Column(name = "option_value", nullable = false, length = 50)
+    private String optionValue;
 }
