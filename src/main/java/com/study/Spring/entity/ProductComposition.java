@@ -4,24 +4,29 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "product_composition")
-@Data
-@AllArgsConstructor
+@Getter
+@Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class ProductComposition {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long combinationId;
+    private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "products_id", nullable = false)
-    private Product product;
+    private String name;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private ValidStatus isValid;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id")
+    private Product product;
+
+    public Long getCombinationId() {
+        return this.id; // 조합 id 반환
+    }
 
     public enum ValidStatus {
         VALID, INVALID

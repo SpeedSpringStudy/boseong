@@ -4,10 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "stock")
-@Data
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@NoArgsConstructor
 @Builder
 public class Stock {
 
@@ -15,13 +14,14 @@ public class Stock {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "combination_id", nullable = false, unique = true)
-    private ProductComposition productComposition;
+    @ManyToOne(fetch = FetchType.LAZY)  // 상품과 다대일 관계
+    @JoinColumn(name = "product_id", nullable = false)
+    private Product product;
 
     @Column(nullable = false)
-    private int quantity;
+    private Integer quantity;
 
-    @Version
-    private Long version;
+    public void updateQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
 }
