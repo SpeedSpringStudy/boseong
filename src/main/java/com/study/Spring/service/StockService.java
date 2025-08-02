@@ -1,0 +1,41 @@
+package com.study.Spring.service;
+
+import com.study.Spring.dto.StockRequest;
+import com.study.Spring.dto.StockResponse;
+import com.study.Spring.entity.Product;
+import com.study.Spring.entity.Stock;
+import com.study.Spring.repository.ProductRepository;
+import com.study.Spring.repository.StockRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Service
+@RequiredArgsConstructor
+public class StockService {
+
+    private final StockRepository stockRepository;
+    private final ProductRepository productRepository;
+
+    @Transactional
+    public StockResponse createStock(StockRequest request) {
+        Product product = productRepository.findById(request.productId())
+                .orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다."));
+
+        Stock stock = Stock.builder()
+                .product(product)
+                .quantity(request.quantity())
+                .build();
+
+        Stock savedStock = stockRepository.save(stock);
+
+        return new StockResponse(savedStock.getId(), product.getId(), savedStock.getQuantity());
+    }
+
+    @Transactional(readOnly = true)
+    public StockResponse getStock(Long stockId) {
+        Stock stock = stockRepository.findById(stockId)
+                .orElseThrow(() -> new IllegalArgumentException("재고를 찾을 수 없습니다."));
+        return new StockResponse(stock.getId(), stock.getProduct().getId(), stock.getQuantity());
+    }
+}
