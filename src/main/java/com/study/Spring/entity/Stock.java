@@ -6,7 +6,7 @@ import lombok.*;
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class Stock {
@@ -15,14 +15,9 @@ public class Stock {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)  // 상품과 다대일 관계
-    @JoinColumn(name = "product_id", nullable = false)
-    private Product product;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "composition_id", nullable = false)
+    private ProductComposition composition;
 
-    @Column(nullable = false)
-    private Integer quantity;
-
-    public void updateQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
+    private int quantity;
 }

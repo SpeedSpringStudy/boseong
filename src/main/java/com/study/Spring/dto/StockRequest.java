@@ -6,6 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class StockRequest {
-    private Long productId;
+    private Long compositionId;
     private int quantity;
 }
