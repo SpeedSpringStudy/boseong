@@ -19,12 +19,12 @@ public class StockService {
 
     @Transactional
     public StockResponse createStock(StockRequest request) {
-        Product product = productRepository.findById(request.productId())
+        Product product = productRepository.findById(request.getProductId())
                 .orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다."));
 
         Stock stock = Stock.builder()
                 .product(product)
-                .quantity(request.quantity())
+                .quantity(request.getQuantity())
                 .build();
 
         Stock savedStock = stockRepository.save(stock);
@@ -37,5 +37,14 @@ public class StockService {
         Stock stock = stockRepository.findById(stockId)
                 .orElseThrow(() -> new IllegalArgumentException("재고를 찾을 수 없습니다."));
         return new StockResponse(stock.getId(), stock.getProduct().getId(), stock.getQuantity());
+    }
+
+    @Transactional
+    public StockResponse updateStock(Long stockId, StockRequest request) {
+        Stock stock = stockRepository.findById(stockId)
+                .orElseThrow(() -> new IllegalArgumentException("재고를 찾을 수 없습니다."));
+        stock.setQuantity(request.getQuantity());
+        Stock updated = stockRepository.save(stock);
+        return new StockResponse(updated.getId(), updated.getProduct().getId(), updated.getQuantity());
     }
 }

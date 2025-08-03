@@ -1,3 +1,11 @@
 package com.study.Spring.dto;
 
-public record StockRequest(Long productId, int quantity) {}
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+public class StockRequest {
+    private Long productId;
+    private int quantity;
+}
