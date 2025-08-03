@@ -7,6 +7,6 @@ import lombok.Getter;
 @AllArgsConstructor
 public class StockResponse {
     private Long stockId;
-    private Long productId;
+    private Long compositionId;
     private Integer quantity;
 }
