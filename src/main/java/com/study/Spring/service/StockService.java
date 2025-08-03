@@ -2,12 +2,11 @@ package com.study.Spring.service;
 
 import com.study.Spring.dto.StockRequest;
 import com.study.Spring.dto.StockResponse;
-import com.study.Spring.entity.Product;
 import com.study.Spring.entity.ProductComposition;
 import com.study.Spring.entity.Stock;
 import com.study.Spring.repository.ProductCompositionRepository;
-import com.study.Spring.repository.ProductRepository;
 import com.study.Spring.repository.StockRepository;
+import jakarta.persistence.OptimisticLockException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,8 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 public class StockService {
 
     private final StockRepository stockRepository;
-    private final ProductRepository productRepository;
     private final ProductCompositionRepository productCompositionRepository;
+
+    private static final int MAX_RETRIES = 3; // 재시도 최대 횟수
 
     @Transactional
     public StockResponse createStock(StockRequest request) {
@@ -31,7 +31,6 @@ public class StockService {
                 .build();
 
         Stock savedStock = stockRepository.save(stock);
-
         return new StockResponse(savedStock.getId(), composition.getId(), savedStock.getQuantity());
     }
 
@@ -44,10 +43,20 @@ public class StockService {
 
     @Transactional
     public StockResponse updateStock(Long stockId, StockRequest request) {
-        Stock stock = stockRepository.findById(stockId)
-                .orElseThrow(() -> new IllegalArgumentException("재고를 찾을 수 없습니다."));
-        stock.setQuantity(request.getQuantity());
-        Stock updated = stockRepository.save(stock);
-        return new StockResponse(updated.getId(), updated.getComposition().getId(), updated.getQuantity());
+        int attempt = 0;
+        while (true) {
+            try {
+                attempt++;
+                Stock stock = stockRepository.findById(stockId)
+                        .orElseThrow(() -> new IllegalArgumentException("재고를 찾을 수 없습니다."));
+                stock.setQuantity(request.getQuantity());
+                Stock updated = stockRepository.saveAndFlush(stock); // 즉시 반영
+                return new StockResponse(updated.getId(), updated.getComposition().getId(), updated.getQuantity());
+            } catch (OptimisticLockException e) {
+                if (attempt >= MAX_RETRIES) {
+                    throw new RuntimeException("재고 업데이트 충돌이 너무 많이 발생했습니다. 다시 시도해주세요.");
+                }
+            }
+        }
     }
 }
