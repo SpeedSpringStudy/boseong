@@ -253,7 +253,7 @@ Content-Type: application/json
 
 
 
-#Week#5
+# Week#5
 <details>
 <summary><strong>Week#5-Step#1</strong></summary>
 ## 기능 요구 사항
