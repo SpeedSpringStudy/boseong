@@ -250,9 +250,6 @@ Content-Type: application/json
 </details>
 
 
-
-
-
 # Week#5
 <details>
 <summary><strong>Week#5-Step#1</strong></summary>
@@ -319,11 +316,4 @@ var request = new RequestEntity<>(body, headers, HttpMethod.POST, URI.create(url
 - 응답 시간이 길면 어떻게 할까? 몇 초가 적당할까?
 - 오류 코드는 어떻게 처리해야 할까?
 - 응답 값을 파싱할 때 문제가 발생하면 어떻게 할까?
-
-
-    
 </details>
-
-
-
-
