@@ -20,4 +20,7 @@ public class Stock {
     private ProductComposition composition;
 
     private int quantity;
+
+    @Version
+    private Long version; // 낙관적 락 버전 필드 추가
 }
