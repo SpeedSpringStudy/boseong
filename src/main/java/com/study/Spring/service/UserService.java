@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.study.Spring.entity.Role;
 
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -61,5 +63,20 @@ public class UserService {
     public User findById(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+    }
+
+    @Transactional
+    public User findOrCreateByKakaoId(Long kakaoId, String nickname, String email) {
+        return userRepository.findByKakaoId(kakaoId)
+                .orElseGet(() -> {
+                    User newUser = User.builder()
+                            .username("kakao_" + kakaoId) // 내부용 username
+                            .password("{noop}" + UUID.randomUUID()) // 임시 비밀번호
+                            .kakaoId(kakaoId)
+                            .email(email)
+                            .role(Role.USER)
+                            .build();
+                    return userRepository.save(newUser);
+                });
     }
 }
