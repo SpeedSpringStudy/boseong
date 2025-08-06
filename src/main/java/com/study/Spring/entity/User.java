@@ -26,4 +26,10 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
+
+    @Column(name = "kakao_id", unique = true)
+    private Long kakaoId;
+
+    @Column(name = "email", unique = true)
+    private String email;
 }
