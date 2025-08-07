@@ -15,7 +15,7 @@ public class User {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String username;
+    private String email;
 
     @Column(nullable = false)
     private String password;
@@ -29,7 +29,4 @@ public class User {
 
     @Column(name = "kakao_id", unique = true)
     private Long kakaoId;
-
-    @Column(name = "email", unique = true)
-    private String email;
 }

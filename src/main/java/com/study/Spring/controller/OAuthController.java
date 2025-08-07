@@ -22,7 +22,6 @@ public class OAuthController {
     private final UserService userService;
     private final JwtTokenProvider jwtTokenProvider;
 
-    // application.properties 값 주입
     @Value("${kakao.client.id}")
     private String kakaoClientId;
 
@@ -49,16 +48,15 @@ public class OAuthController {
 
         // 2. Access Token으로 사용자 정보 조회
         KakaoUserInfo userInfo = kakaoOAuthService.getUserInfo(tokenResponse.accessToken());
-        String nickname = userInfo.kakaoAccount().profile().nickname();
         String email = userInfo.kakaoAccount().email();
 
-        // 3. DB에서 카카오 사용자 찾거나 없으면 신규 가입
-        User user = userService.findOrCreateByKakaoId(userInfo.id(), nickname, email);
+        // 3. 이메일로 기존 사용자 확인 후 kakaoId 추가 or 신규 생성
+        User user = kakaoOAuthService.findOrCreateByKakao(userInfo.id(), email);
 
         // 4. JWT 발급
         String accessToken = jwtTokenProvider.createToken(user.getId());
         String refreshToken = jwtTokenProvider.createRefreshToken();
-        userService.updateRefreshToken(user.getUsername(), refreshToken);
+        userService.updateRefreshToken(user.getEmail(), refreshToken);
 
         // 5. 쿠키에 저장
         Cookie cookie = new Cookie("access_token", accessToken);

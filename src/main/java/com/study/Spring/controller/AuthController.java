@@ -27,34 +27,37 @@ public class AuthController {
     private final JwtTokenProvider jwtTokenProvider;
     private final UserService userService;
 
+    // 일반 사용자 회원가입
     @PostMapping("/signup/user")
     public ResponseEntity<String> signup(@RequestBody @Valid SignupRequestDto request) {
-        userService.register(request.username(), request.password());
+        userService.register(request.email(), request.password());
         return ResponseEntity.ok("회원가입 성공");
     }
 
+    // 관리자 회원가입
     @PostMapping("/signup/admin")
     public ResponseEntity<String> signupAdmin(@RequestBody @Valid AdminSignupRequestDto request) {
-        userService.registerAdmin(request.username(), request.password());
+        userService.registerAdmin(request.email(), request.password());
         return ResponseEntity.ok("관리자 계정 생성 성공");
     }
 
+    // 로그인
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody Map<String, String> loginInfo, HttpServletResponse response ) {
-        String username = loginInfo.get("username");
+    public ResponseEntity<String> login(@RequestBody Map<String, String> loginInfo, HttpServletResponse response) {
+        String email = loginInfo.get("email");
         String password = loginInfo.get("password");
 
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(username, password)
+                new UsernamePasswordAuthenticationToken(email, password)
         );
 
-        User user = userService.findByUsername(username);
+        User user = userService.findByEmail(email);
         Long userId = user.getId();
 
         String accessToken = jwtTokenProvider.createToken(userId);
 
         String refreshToken = jwtTokenProvider.createRefreshToken();
-        userService.updateRefreshToken(username, refreshToken);
+        userService.updateRefreshToken(email, refreshToken);
 
         Cookie accessTokenCookie = new Cookie("access_token", accessToken);
         accessTokenCookie.setHttpOnly(true);
@@ -74,6 +77,7 @@ public class AuthController {
         return ResponseEntity.ok(accessToken);
     }
 
+    // 리프레시 토큰으로 액세스 토큰 재발급
     @PostMapping("/refresh-token")
     public ResponseEntity<Map<String, String>> refresh(HttpServletRequest request,
                                                        @RequestBody Map<String, String> body) {
@@ -101,11 +105,6 @@ public class AuthController {
         }
 
         String newAccessToken = jwtTokenProvider.createToken(userId);
-
-//      디버그용
-//        System.out.println("accessToken: " + accessToken);
-//        System.out.println("userId from token: " + userId);
-
         return ResponseEntity.ok(Map.of("accessToken", newAccessToken));
     }
 }
