@@ -2,10 +2,14 @@ package com.study.Spring.service;
 
 import com.study.Spring.dto.KakaoTokenResponse;
 import com.study.Spring.dto.KakaoUserInfo;
+import com.study.Spring.entity.Role;
+import com.study.Spring.entity.User;
+import com.study.Spring.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -25,9 +29,9 @@ public class KakaoOAuthService {
     @Value("${kakao.userinfo.uri}")
     private String userInfoUri;
 
+    private final UserRepository userRepository;
     private final RestTemplate restTemplate = new RestTemplate();
 
-    // 1. 인가 코드로 토큰 발급
     public KakaoTokenResponse getAccessToken(String code) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -53,7 +57,6 @@ public class KakaoOAuthService {
         return response.getBody();
     }
 
-    // 2. 토큰으로 사용자 정보 가져오기
     public KakaoUserInfo getUserInfo(String accessToken) {
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(accessToken);
@@ -68,5 +71,22 @@ public class KakaoOAuthService {
         );
 
         return response.getBody();
+    }
+
+    @Transactional
+    public User findOrCreateByKakao(Long kakaoId, String email) {
+        return userRepository.findByEmail(email)
+                .map(user -> {
+                    user.setKakaoId(kakaoId);
+                    return userRepository.save(user);
+                })
+                .orElseGet(() -> {
+                    User newUser = User.builder()
+                            .email(email)
+                            .kakaoId(kakaoId)
+                            .role(Role.USER)
+                            .build();
+                    return userRepository.save(newUser);
+                });
     }
 }

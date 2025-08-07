@@ -11,13 +11,30 @@ public class CustomUserDetails implements UserDetails {
 
     public CustomUserDetails(User user) { this.user = user; }
 
-    @Override public String getUsername() { return user.getUsername(); }
-    @Override public String getPassword() { return user.getPassword(); }
-    @Override public boolean isAccountNonExpired() { return true; }
-    @Override public boolean isAccountNonLocked() { return true; }
-    @Override public boolean isCredentialsNonExpired() { return true; }
-    @Override public boolean isEnabled() { return true; }
-    @Override public java.util.Collection<? extends GrantedAuthority> getAuthorities() {
+    @Override
+    public String getUsername() {
+        return user.getEmail();  // 이메일을 username으로 사용
+    }
+
+    @Override
+    public String getPassword() {
+        return user.getPassword();
+    }
+
+    @Override
+    public boolean isAccountNonExpired() { return true; }
+
+    @Override
+    public boolean isAccountNonLocked() { return true; }
+
+    @Override
+    public boolean isCredentialsNonExpired() { return true; }
+
+    @Override
+    public boolean isEnabled() { return true; }
+
+    @Override
+    public java.util.Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singleton(() -> "ROLE_" + user.getRole().name());
     }
 
