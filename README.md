@@ -319,7 +319,6 @@ var request = new RequestEntity<>(body, headers, HttpMethod.POST, URI.create(url
 - 응답 값을 파싱할 때 문제가 발생하면 어떻게 할까?
 </details>
 
-# Week#5
 <details>
 <summary><strong>Week#5-Step#2</strong></summary>
 
