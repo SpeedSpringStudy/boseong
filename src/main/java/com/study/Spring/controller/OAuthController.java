@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/oauth/kakao")
@@ -28,37 +30,26 @@ public class OAuthController {
     @Value("${kakao.redirect.uri}")
     private String kakaoRedirectUri;
 
-    // 카카오 로그인 리다이렉트 URL
     @GetMapping("/login")
     public ResponseEntity<Void> redirectToKakaoLogin() {
         String kakaoAuthUrl = "https://kauth.kakao.com/oauth/authorize"
                 + "?response_type=code"
                 + "&client_id=" + kakaoClientId
                 + "&redirect_uri=" + kakaoRedirectUri;
-        return ResponseEntity.status(302)
-                .header("Location", kakaoAuthUrl)
-                .build();
+        return ResponseEntity.status(302).header("Location", kakaoAuthUrl).build();
     }
 
-    // 카카오 로그인 콜백
     @GetMapping("/callback")
     public ResponseEntity<String> kakaoCallback(@RequestParam String code, HttpServletResponse response) {
-        // 1. 인가 코드로 토큰 발급
         KakaoTokenResponse tokenResponse = kakaoOAuthService.getAccessToken(code);
-
-        // 2. Access Token으로 사용자 정보 조회
         KakaoUserInfo userInfo = kakaoOAuthService.getUserInfo(tokenResponse.accessToken());
         String email = userInfo.kakaoAccount().email();
-
-        // 3. 이메일로 기존 사용자 확인 후 kakaoId 추가 or 신규 생성
         User user = kakaoOAuthService.findOrCreateByKakao(userInfo.id(), email);
 
-        // 4. JWT 발급
         String accessToken = jwtTokenProvider.createToken(user.getId());
         String refreshToken = jwtTokenProvider.createRefreshToken();
         userService.updateRefreshToken(user.getEmail(), refreshToken);
 
-        // 5. 쿠키에 저장
         Cookie cookie = new Cookie("access_token", accessToken);
         cookie.setHttpOnly(true);
         cookie.setSecure(true);
@@ -66,6 +57,9 @@ public class OAuthController {
         cookie.setMaxAge(60 * 60);
         response.addCookie(cookie);
 
-        return ResponseEntity.ok("카카오 로그인 성공! JWT 발급 완료");
+        LocalDateTime expiresAt = LocalDateTime.now().plusSeconds(tokenResponse.expiresIn() == null ? 3600 : tokenResponse.expiresIn());
+        userService.updateKakaoTokens(user.getId(), tokenResponse.accessToken(), tokenResponse.refreshToken(), expiresAt);
+
+        return ResponseEntity.ok("카카오 로그인 성공");
     }
 }

@@ -3,6 +3,8 @@ package com.study.Spring.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "users")
 @Data
@@ -29,4 +31,13 @@ public class User {
 
     @Column(name = "kakao_id", unique = true)
     private Long kakaoId;
+
+    @Column(name = "kakao_access_token", length = 2048)
+    private String kakaoAccessToken;
+
+    @Column(name = "kakao_refresh_token", length = 2048)
+    private String kakaoRefreshToken;
+
+    @Column(name = "kakao_token_expires_at")
+    private LocalDateTime kakaoTokenExpiresAt;
 }
