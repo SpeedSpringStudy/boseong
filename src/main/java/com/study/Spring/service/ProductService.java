@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 public class ProductService {
 
     private final ProductRepository productRepository;
-    private final CategoryService categoryService; // 추가
+    private final CategoryService categoryService;
 
     public Slice<ProductResponseDto> getAll(Pageable pageable) {
         return productRepository.findAllBy(pageable)
@@ -42,7 +42,7 @@ public class ProductService {
     }
 
     public Long create(ProductRequestDto requestDto) {
-        Category category = categoryService.findById(requestDto.categoryId()); // 카테고리 조회
+        Category category = categoryService.findById(requestDto.categoryId());
         Product product = Product.builder()
                 .name(new Name(requestDto.name()))
                 .price(requestDto.price())
@@ -52,7 +52,7 @@ public class ProductService {
     }
 
     public Long update(Long id, ProductRequestDto requestDto) {
-        Category category = categoryService.findById(requestDto.categoryId()); // 카테고리 조회
+        Category category = categoryService.findById(requestDto.categoryId());
         Product updated = Product.builder()
                 .id(id)
                 .name(new Name(requestDto.name()))

@@ -25,7 +25,6 @@ public class WishlistController {
         return wishlistService.addToWishlist(userId, requestDto.productId());
     }
 
-    // 페이지네이션 적용
     @GetMapping
     public Page<WishlistResponseDto> get(HttpServletRequest request, Pageable pageable) {
         String token = extractToken(request);

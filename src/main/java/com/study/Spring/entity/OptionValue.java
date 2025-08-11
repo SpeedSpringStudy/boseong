@@ -6,7 +6,7 @@ import lombok.*;
 @Entity
 @Getter
 @Setter
-@Builder // 추가
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "option_values")

@@ -25,7 +25,7 @@ public class ProductComposition {
     private Product product;
 
     public Long getCombinationId() {
-        return this.id; // 조합 id 반환
+        return this.id;
     }
 
     public enum ValidStatus {
