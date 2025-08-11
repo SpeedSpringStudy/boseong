@@ -50,7 +50,7 @@ public class StockService {
                 Stock stock = stockRepository.findById(stockId)
                         .orElseThrow(() -> new IllegalArgumentException("재고를 찾을 수 없습니다."));
                 stock.setQuantity(request.getQuantity());
-                Stock updated = stockRepository.saveAndFlush(stock); // 즉시 반영
+                Stock updated = stockRepository.saveAndFlush(stock);
                 return new StockResponse(updated.getId(), updated.getComposition().getId(), updated.getQuantity());
             } catch (OptimisticLockException e) {
                 if (attempt >= MAX_RETRIES) {

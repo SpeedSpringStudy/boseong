@@ -13,7 +13,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return user.getEmail();  // 이메일을 username으로 사용
+        return user.getEmail();
     }
 
     @Override
